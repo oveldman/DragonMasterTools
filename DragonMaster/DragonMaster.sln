@@ -1,8 +1,53 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{7205C9CA-0B8E-4465-A712-9F906A7DC894}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{BF92E299-E372-4B90-BC6A-75557029FDF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{8A151D1C-F851-450A-BA74-C77C858E7257}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.Contracts", "DragonMaster.Contracts\DragonMaster.Contracts.csproj", "{89CB4DAE-8A0D-472A-960F-CBF040220232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.Web.UI", "DragonMaster.Web.UI\DragonMaster.Web.UI.csproj", "{7B5ABEAE-3CF3-4CC5-9A17-88C7791621E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.Web.Application", "DragonMaster.Web.Application\DragonMaster.Web.Application.csproj", "{8118D66D-6C83-42C7-8067-6FEC24441F10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.Web.Domain", "DragonMaster.Web.Domain\DragonMaster.Web.Domain.csproj", "{AF19DFAC-C9B4-443E-9205-AF29A0C894A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.Web.Infrastructure", "DragonMaster.Web.Infrastructure\DragonMaster.Web.Infrastructure.csproj", "{821784FB-FC9B-43B9-B810-208B443FE469}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{89CB4DAE-8A0D-472A-960F-CBF040220232} = {8A151D1C-F851-450A-BA74-C77C858E7257}
+		{7B5ABEAE-3CF3-4CC5-9A17-88C7791621E4} = {BF92E299-E372-4B90-BC6A-75557029FDF5}
+		{8118D66D-6C83-42C7-8067-6FEC24441F10} = {BF92E299-E372-4B90-BC6A-75557029FDF5}
+		{AF19DFAC-C9B4-443E-9205-AF29A0C894A1} = {BF92E299-E372-4B90-BC6A-75557029FDF5}
+		{821784FB-FC9B-43B9-B810-208B443FE469} = {BF92E299-E372-4B90-BC6A-75557029FDF5}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89CB4DAE-8A0D-472A-960F-CBF040220232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89CB4DAE-8A0D-472A-960F-CBF040220232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89CB4DAE-8A0D-472A-960F-CBF040220232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89CB4DAE-8A0D-472A-960F-CBF040220232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B5ABEAE-3CF3-4CC5-9A17-88C7791621E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B5ABEAE-3CF3-4CC5-9A17-88C7791621E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B5ABEAE-3CF3-4CC5-9A17-88C7791621E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B5ABEAE-3CF3-4CC5-9A17-88C7791621E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8118D66D-6C83-42C7-8067-6FEC24441F10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8118D66D-6C83-42C7-8067-6FEC24441F10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8118D66D-6C83-42C7-8067-6FEC24441F10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8118D66D-6C83-42C7-8067-6FEC24441F10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF19DFAC-C9B4-443E-9205-AF29A0C894A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF19DFAC-C9B4-443E-9205-AF29A0C894A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF19DFAC-C9B4-443E-9205-AF29A0C894A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF19DFAC-C9B4-443E-9205-AF29A0C894A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{821784FB-FC9B-43B9-B810-208B443FE469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{821784FB-FC9B-43B9-B810-208B443FE469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{821784FB-FC9B-43B9-B810-208B443FE469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{821784FB-FC9B-43B9-B810-208B443FE469}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
