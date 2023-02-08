@@ -11,7 +11,6 @@ using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
-
 [GitHubActions(
     "Build&Test",
     GitHubActionsImage.UbuntuLatest,
