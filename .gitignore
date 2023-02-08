@@ -351,3 +351,6 @@ MigrationBackup/
 
 # Rider IDEA
 .idea/
+
+# Nuke
+.nuke/
