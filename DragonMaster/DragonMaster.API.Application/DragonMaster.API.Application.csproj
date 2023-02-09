@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DragonMaster.API.Domain\DragonMaster.API.Domain.csproj" />
+      <ProjectReference Include="..\DragonMaster.Web.Domain\DragonMaster.Web.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

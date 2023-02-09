@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DragonMaster.API.Authorized": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7075",
+      "launchBrowser": false
+    }
+  }
+}
