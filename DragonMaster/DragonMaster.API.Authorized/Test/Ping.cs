@@ -9,7 +9,7 @@ namespace DragonMaster.API.Authorized.Test;
 public static class Ping
 {
     [Function(nameof(Ping))]
-    public static HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+    public static HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req,
         FunctionContext executionContext)
     {
         var logger = executionContext.GetLogger("Ping");
