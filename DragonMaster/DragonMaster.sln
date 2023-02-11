@@ -30,6 +30,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.API.Domain", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.API.Infrastructure", "DragonMaster.API.Infrastructure\DragonMaster.API.Infrastructure.csproj", "{8024687E-EEAE-41AC-BB43-2107BDA207FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.API.Unittests", "DragonMaster.API.Unittests\DragonMaster.API.Unittests.csproj", "{3E49901B-27FB-4DC9-9B0D-865EBD333C88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonMaster.Web.Unittests", "DragonMaster.Web.Unittests\DragonMaster.Web.Unittests.csproj", "{22C22FDE-15CD-4A8A-9118-FE7151409F88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,8 @@ Global
 		{46A6A861-75BB-4253-B36F-93EADD02C6F1} = {7205C9CA-0B8E-4465-A712-9F906A7DC894}
 		{DA3F4032-EB14-4184-ABDB-A7312A02DA4A} = {7205C9CA-0B8E-4465-A712-9F906A7DC894}
 		{8024687E-EEAE-41AC-BB43-2107BDA207FF} = {7205C9CA-0B8E-4465-A712-9F906A7DC894}
+		{3E49901B-27FB-4DC9-9B0D-865EBD333C88} = {7205C9CA-0B8E-4465-A712-9F906A7DC894}
+		{22C22FDE-15CD-4A8A-9118-FE7151409F88} = {BF92E299-E372-4B90-BC6A-75557029FDF5}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4C54C1E0-943C-4D41-942B-7E40403C5D6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -91,5 +97,13 @@ Global
 		{8024687E-EEAE-41AC-BB43-2107BDA207FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8024687E-EEAE-41AC-BB43-2107BDA207FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8024687E-EEAE-41AC-BB43-2107BDA207FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E49901B-27FB-4DC9-9B0D-865EBD333C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E49901B-27FB-4DC9-9B0D-865EBD333C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E49901B-27FB-4DC9-9B0D-865EBD333C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E49901B-27FB-4DC9-9B0D-865EBD333C88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C22FDE-15CD-4A8A-9118-FE7151409F88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C22FDE-15CD-4A8A-9118-FE7151409F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C22FDE-15CD-4A8A-9118-FE7151409F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C22FDE-15CD-4A8A-9118-FE7151409F88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
