@@ -1,6 +1,13 @@
 @page "/Ping"
-<h3>Ping</h3>
 
-@code {
-    
-}
+<h3>Ping Anonymous</h3>
+
+<p>Reaction: @_anonymousPingResponse</p>
+
+<button type="button" class="btn btn-primary" @onclick="GetAnonymousPingAsync">Ping Anonymous API</button>
+
+<h3>Ping Authorized</h3>
+
+<p>Reaction: @_authorizedPingResponse</p>
+
+<button type="button" class="btn btn-primary" @onclick="GetAuthorizedPingAsync">Ping Authorized API</button>
