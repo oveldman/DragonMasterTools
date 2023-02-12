@@ -17,7 +17,7 @@ public partial class Ping
     protected override async Task OnInitializedAsync()
     {
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var authenticated = authenticationState.User.Identity?.IsAuthenticated ?? false;
+        Authenticated = authenticationState.User.Identity?.IsAuthenticated ?? false;
         await base.OnInitializedAsync();
     }
 
