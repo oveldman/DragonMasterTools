@@ -2,6 +2,7 @@ using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [GitHubActions(
@@ -86,7 +87,8 @@ public class BuildAndTest : NukeBuild
     
     Target PublishApis => _ => _
         .DependsOn(CreateApiArtifacts)
-        .Executes(() =>
+        .Executes(async () =>
         {
+            // https://github.com/Azure/azure-sdk-for-net/blob/Azure.ResourceManager_1.4.0/sdk/resourcemanager/Azure.ResourceManager/README.md
         });
 }
