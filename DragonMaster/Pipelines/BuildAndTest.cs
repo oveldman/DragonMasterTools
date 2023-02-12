@@ -8,7 +8,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "Build&Test",
     GitHubActionsImage.UbuntuLatest,
     On = new[] { GitHubActionsTrigger.Push },
-    InvokedTargets = new[] { nameof(Test) })]
+    InvokedTargets = new[] { nameof(Test2) })]
 public class BuildAndTest : NukeBuild
 {
     /// Support plugins are available for:
@@ -18,9 +18,8 @@ public class BuildAndTest : NukeBuild
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
     public static int Main () => Execute<BuildAndTest>(
-        x => x.Clean,
-        x => x.Compile, 
-        x => x.Test);
+        x => x.Test2
+    );
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -54,6 +53,16 @@ public class BuildAndTest : NukeBuild
     
     Target Test => _ => _
         .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(_ => _
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .EnableNoBuild());
+        });
+    
+    Target Test2 => _ => _
+        .DependsOn(Test)
         .Executes(() =>
         {
             DotNetTest(_ => _
