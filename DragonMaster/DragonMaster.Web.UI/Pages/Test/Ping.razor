@@ -6,8 +6,19 @@
 
 <button type="button" class="btn btn-primary" @onclick="GetAnonymousPingAsync">Ping Anonymous API</button>
 
-<h3>Ping Authorized</h3>
-
-<p>Reaction: @_authorizedPingResponse</p>
-
-<button type="button" class="btn btn-primary" @onclick="GetAuthorizedPingAsync">Ping Authorized API</button>
+@if (Authenticated)
+{
+    <h3>Ping Authorized</h3>
+    
+    <p>Reaction: @_authorizedPingResponse</p>
+    
+    <button type="button" class="btn btn-primary" @onclick="GetAuthorizedPingAsync">Ping Authorized API</button>    
+}
+else
+{
+    <h3>Ping Authorized</h3>
+    
+    <p>You need to log in first.</p>
+    
+    <button type="button" class="btn btn-primary" disabled="disabled">Ping Authorized API</button> 
+}

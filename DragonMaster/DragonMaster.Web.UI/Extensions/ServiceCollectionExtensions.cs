@@ -1,4 +1,5 @@
 using DragonMaster.Web.Application.Data.Test;
+using DragonMaster.Web.Domain.Api;
 using DragonMaster.Web.Infrastructure.ApiServices.Test;
 
 namespace DragonMaster.Web.UI.Extensions;

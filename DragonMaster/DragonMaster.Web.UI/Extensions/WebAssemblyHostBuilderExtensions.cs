@@ -1,3 +1,4 @@
+using DragonMaster.Web.Application.Authorization;
 using DragonMaster.Web.Domain.Api;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -16,23 +17,39 @@ public static class WebAssemblyHostBuilderExtensions
         return builder;
     }
     
+    public static WebAssemblyHostBuilder AddDragonMaster(this WebAssemblyHostBuilder builder)
+    {
+        builder.Services.AddDragonMaster();
+        builder.AddConfigurationSettings();
+        return builder;
+    }
+    
     private static void AddAnonymousHttpClient(this WebAssemblyHostBuilder builder)
     {
-        var apiUrlAnonymous = builder.Configuration["ApiUrls:Anonymous"]!;
-
         builder.Services.AddHttpClient(ApiTypes.DragonMasterApiAnonymous, (serviceProvider, client) =>
         {
-            client.BaseAddress = new Uri(apiUrlAnonymous);
+            var apiUrls = serviceProvider.GetService<ApiUrls>()!;
+            client.BaseAddress = new Uri(apiUrls.Anonymous);
         }).AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
     }
     
     private static void AddAuthorizedHttpClient(this WebAssemblyHostBuilder builder)
     {
-        var apiUrlAnonymous = builder.Configuration["ApiUrls:Authorized"]!;
-
+        builder.Services.AddScoped<DragonAuthorizationMessageHandler>();
         builder.Services.AddHttpClient(ApiTypes.DragonMasterApiAuthorized, (serviceProvider, client) =>
         {
-            client.BaseAddress = new Uri(apiUrlAnonymous);
-        }).AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+            var apiUrls = serviceProvider.GetService<ApiUrls>()!;
+            client.BaseAddress = new Uri(apiUrls.Authorized);
+        }).AddHttpMessageHandler<DragonAuthorizationMessageHandler>();
+    }
+
+    private static void AddConfigurationSettings(this WebAssemblyHostBuilder builder)
+    {
+        var apiUrls = builder
+            .Configuration
+            .GetSection("ApiUrls")
+            .Get<ApiUrls>()!;
+        
+        builder.Services.AddSingleton(apiUrls);
     }
 }
