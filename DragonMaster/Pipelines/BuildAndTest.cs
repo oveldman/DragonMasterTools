@@ -8,7 +8,12 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "Build&Test",
     GitHubActionsImage.UbuntuLatest,
     On = new[] { GitHubActionsTrigger.Push },
-    InvokedTargets = new[] { nameof(Test2) })]
+    InvokedTargets = new[] { nameof(Test) })]
+[GitHubActions(
+    "PublishAPIs",
+    GitHubActionsImage.UbuntuLatest,
+    OnPushBranches = new[] { "main" },
+    InvokedTargets = new[] { nameof(PublishApis) })]
 public class BuildAndTest : NukeBuild
 {
     /// Support plugins are available for:
@@ -18,7 +23,8 @@ public class BuildAndTest : NukeBuild
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
     public static int Main () => Execute<BuildAndTest>(
-        x => x.Test2
+        x => x.Test,
+        x => x.PublishApis
     );
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -61,13 +67,26 @@ public class BuildAndTest : NukeBuild
                 .EnableNoBuild());
         });
     
-    Target Test2 => _ => _
-        .DependsOn(Test)
+    Target CreateApiArtifacts => _ => _
+        .DependsOn(Compile)
         .Executes(() =>
         {
-            DotNetTest(_ => _
-                .SetProjectFile(Solution)
+            DotNetPublish(_ => _
+                .SetProject(Solution.GetProject("DragonMaster.API.Anonymous"))
                 .SetConfiguration(Configuration)
-                .EnableNoBuild());
+                .EnableNoBuild()
+                .SetOutput("artifacts/Anonymous"));
+            
+            DotNetPublish(_ => _
+                .SetProject(Solution.GetProject("DragonMaster.API.Authorized"))
+                .SetConfiguration(Configuration)
+                .EnableNoBuild()
+                .SetOutput("artifacts/Authorized"));
+        });
+    
+    Target PublishApis => _ => _
+        .DependsOn(CreateApiArtifacts)
+        .Executes(() =>
+        {
         });
 }
