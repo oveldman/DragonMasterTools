@@ -18,8 +18,9 @@ public class BuildAndTest : NukeBuild
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
     public static int Main () => Execute<BuildAndTest>(
-        x => x.Test
-    );
+        x => x.Clean,
+        x => x.Compile, 
+        x => x.Test);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
