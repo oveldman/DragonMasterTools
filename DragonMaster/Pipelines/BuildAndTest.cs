@@ -8,8 +8,8 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "Build&Test",
     GitHubActionsImage.UbuntuLatest,
     On = new[] { GitHubActionsTrigger.Push },
-    InvokedTargets = new[] { nameof(Compile) })]
-class BuildAndTest : NukeBuild
+    InvokedTargets = new[] { nameof(Test) })]
+public class BuildAndTest : NukeBuild
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -18,9 +18,8 @@ class BuildAndTest : NukeBuild
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
     public static int Main () => Execute<BuildAndTest>(
-        x => x.Clean,
-        x => x.Compile, 
-        x => x.Test);
+        x => x.Test
+    );
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -36,6 +35,7 @@ class BuildAndTest : NukeBuild
         });
 
     Target Restore => _ => _
+        .DependsOn(Clean)
         .Executes(() =>
         {
             DotNetRestore(s => s
