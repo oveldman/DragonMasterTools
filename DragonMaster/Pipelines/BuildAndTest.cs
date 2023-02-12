@@ -27,7 +27,6 @@ public class BuildAndTest : NukeBuild
     [Solution] readonly Solution Solution;
 
     Target Clean => _ => _
-        .Before(Restore)
         .Executes(() =>
         {
             DotNetClean(_ => _
