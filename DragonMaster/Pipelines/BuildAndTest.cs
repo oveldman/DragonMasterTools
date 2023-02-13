@@ -1,9 +1,14 @@
+using System;
+using System.IO;
+using System.IO.Compression;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+
+namespace DragonMaster.Build;
 
 [GitHubActions(
     "Build&Test",
@@ -33,6 +38,11 @@ public class BuildAndTest : NukeBuild
         x => x.PublishBlazor,
         x => x.PublishApis
     );
+    
+    const string OutputDirectory = "artifacts";
+    const string AnonymousSubDirectory = "Anonymous";
+    const string AuthorizedSubDirectory = "Authorized";
+    const string BlazorSubDirectory = "UI";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -44,6 +54,12 @@ public class BuildAndTest : NukeBuild
         {
             DotNetClean(_ => _
                 .SetProject(Solution));
+
+            if (Directory.Exists(OutputDirectory))
+            {
+                Directory.Delete(OutputDirectory, true);
+                Console.WriteLine($"Delete folder: {OutputDirectory}");
+            }
         });
 
     Target Restore => _ => _
@@ -73,7 +89,7 @@ public class BuildAndTest : NukeBuild
                 .SetConfiguration(Configuration)
                 .EnableNoBuild());
         });
-    
+
     Target CreateBlazorArtifacts => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -82,11 +98,19 @@ public class BuildAndTest : NukeBuild
                 .SetProject(Solution.GetProject("DragonMaster.Web.UI"))
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetOutput("artifacts/UI"));
+                .SetOutput($"{OutputDirectory}/UI/Output"));
+        });
+    
+    Target ZipBlazorArtifacts => _ => _
+        .DependsOn(CreateBlazorArtifacts)
+        .Executes(() =>
+        {
+            ZipFile.CreateFromDirectory($"{OutputDirectory}/{BlazorSubDirectory}/Output", $"{OutputDirectory}/{BlazorSubDirectory}/deployment.zip");
+            Console.WriteLine("Blazor deployment.zip created");
         });
     
     Target PublishBlazor => _ => _
-        .DependsOn(CreateBlazorArtifacts)
+        .DependsOn(ZipBlazorArtifacts)
         .Executes(async () =>
         {
             // https://github.com/Azure/azure-sdk-for-net/blob/Azure.ResourceManager_1.4.0/sdk/resourcemanager/Azure.ResourceManager/README.md
@@ -100,17 +124,27 @@ public class BuildAndTest : NukeBuild
                 .SetProject(Solution.GetProject("DragonMaster.API.Anonymous"))
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetOutput("artifacts/Anonymous"));
+                .SetOutput($"{OutputDirectory}/{AnonymousSubDirectory}/Output"));
             
             DotNetPublish(_ => _
                 .SetProject(Solution.GetProject("DragonMaster.API.Authorized"))
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetOutput("artifacts/Authorized"));
+                .SetOutput($"{OutputDirectory}/{AuthorizedSubDirectory}/Output"));
+        });
+    
+    Target ZipApiArtifacts => _ => _
+        .DependsOn(CreateApiArtifacts)
+        .Executes(() =>
+        {
+            ZipFile.CreateFromDirectory($"{OutputDirectory}/{AnonymousSubDirectory}/Output", $"{OutputDirectory}/{AnonymousSubDirectory}/deployment.zip");
+            Console.WriteLine("Azure Function Anonymous deployment.zip created");
+            ZipFile.CreateFromDirectory($"{OutputDirectory}/{AuthorizedSubDirectory}/Output", $"{OutputDirectory}/{AuthorizedSubDirectory}/deployment.zip");
+            Console.WriteLine("Azure Function Authorized deployment.zip created");
         });
     
     Target PublishApis => _ => _
-        .DependsOn(CreateApiArtifacts)
+        .DependsOn(ZipApiArtifacts)
         .Executes(async () =>
         {
             // https://github.com/Azure/azure-sdk-for-net/blob/Azure.ResourceManager_1.4.0/sdk/resourcemanager/Azure.ResourceManager/README.md
