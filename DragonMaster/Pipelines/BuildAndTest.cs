@@ -11,6 +11,11 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     On = new[] { GitHubActionsTrigger.Push },
     InvokedTargets = new[] { nameof(Test) })]
 [GitHubActions(
+    "PublishBlazor",
+    GitHubActionsImage.UbuntuLatest,
+    OnPushBranches = new[] { "main" },
+    InvokedTargets = new[] { nameof(PublishBlazor) })]
+[GitHubActions(
     "PublishAPIs",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
@@ -25,6 +30,7 @@ public class BuildAndTest : NukeBuild
 
     public static int Main () => Execute<BuildAndTest>(
         x => x.Test,
+        x => x.PublishBlazor,
         x => x.PublishApis
     );
 
@@ -66,6 +72,24 @@ public class BuildAndTest : NukeBuild
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .EnableNoBuild());
+        });
+    
+    Target CreateBlazorArtifacts => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetPublish(_ => _
+                .SetProject(Solution.GetProject("DragonMaster.Web.UI"))
+                .SetConfiguration(Configuration)
+                .EnableNoBuild()
+                .SetOutput("artifacts/UI"));
+        });
+    
+    Target PublishBlazor => _ => _
+        .DependsOn(CreateBlazorArtifacts)
+        .Executes(async () =>
+        {
+            // https://github.com/Azure/azure-sdk-for-net/blob/Azure.ResourceManager_1.4.0/sdk/resourcemanager/Azure.ResourceManager/README.md
         });
     
     Target CreateApiArtifacts => _ => _
