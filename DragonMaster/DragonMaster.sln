@@ -103,5 +103,9 @@ Global
 		{22C22FDE-15CD-4A8A-9118-FE7151409F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22C22FDE-15CD-4A8A-9118-FE7151409F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22C22FDE-15CD-4A8A-9118-FE7151409F88}.Release|Any CPU.Build.0 = Release|Any CPU
+        {F916A880-16AF-4204-9AC8-EB8FBFA1F04B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {F916A880-16AF-4204-9AC8-EB8FBFA1F04B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {F916A880-16AF-4204-9AC8-EB8FBFA1F04B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {F916A880-16AF-4204-9AC8-EB8FBFA1F04B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
