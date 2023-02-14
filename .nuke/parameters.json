@@ -1,4 +1,6 @@
 {
   "$schema": "./build.schema.json",
-  "Solution": "DragonMaster/DragonMaster.sln"
+  "Solution": "DragonMaster/DragonMaster.sln",
+  "AnonymousApiUser":"$dragonmaster-Anonymous",
+  "AuthorizedApiUser":"$dragonmaster-Authorized"
 }
