@@ -1,11 +1,12 @@
-using System;
-using System.IO;
 using System.IO.Compression;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-
+using Nuke.Common.Tools.Npm;
+using Serilog;
+using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace DragonMaster.Build;
@@ -19,13 +20,15 @@ namespace DragonMaster.Build;
     "PublishBlazor",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
-    InvokedTargets = new[] { nameof(PublishBlazor) })]
+    InvokedTargets = new[] { nameof(PublishBlazor) },
+    ImportSecrets = new[] { nameof(BlazorPublishToken) })]
 [GitHubActions(
     "PublishAPIs",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
-    InvokedTargets = new[] { nameof(PublishApis) })]
-public class BuildAndTest : NukeBuild
+    InvokedTargets = new[] { nameof(PublishApis) },
+    ImportSecrets = new[] { nameof(AnonymousApiPassword), nameof(AuthorizedApiPassword) })]
+public class Build : NukeBuild
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -33,7 +36,7 @@ public class BuildAndTest : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main () => Execute<BuildAndTest>(
+    public static int Main () => Execute<Build>(
         x => x.Test,
         x => x.PublishBlazor,
         x => x.PublishApis
@@ -43,23 +46,29 @@ public class BuildAndTest : NukeBuild
     const string AnonymousSubDirectory = "Anonymous";
     const string AuthorizedSubDirectory = "Authorized";
     const string BlazorSubDirectory = "UI";
+    
+    [PathExecutable]
+    readonly Tool Swa;
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
     
     [Solution] readonly Solution Solution;
+    
+    [Parameter] readonly string AnonymousApiUser;
+    [Parameter] readonly string AuthorizedApiUser;
+
+    [Parameter] [Secret] readonly string BlazorPublishToken;
+    [Parameter] [Secret] readonly string AnonymousApiPassword;
+    [Parameter] [Secret] readonly string AuthorizedApiPassword;
 
     Target Clean => _ => _
         .Executes(() =>
         {
             DotNetClean(_ => _
                 .SetProject(Solution));
-
-            if (Directory.Exists(OutputDirectory))
-            {
-                Directory.Delete(OutputDirectory, true);
-                Console.WriteLine($"Delete folder: {OutputDirectory}");
-            }
+            
+            EnsureCleanDirectory(OutputDirectory);
         });
 
     Target Restore => _ => _
@@ -98,24 +107,32 @@ public class BuildAndTest : NukeBuild
                 .SetProject(Solution.GetProject("DragonMaster.Web.UI"))
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetOutput($"{OutputDirectory}/UI/Output"));
+                .SetOutput($"{OutputDirectory}/{BlazorSubDirectory}/Output"));
         });
-    
-    Target ZipBlazorArtifacts => _ => _
+
+    Target InstallSwaTools => _ => _
         .DependsOn(CreateBlazorArtifacts)
         .Executes(() =>
         {
-            ZipFile.CreateFromDirectory($"{OutputDirectory}/{BlazorSubDirectory}/Output", $"{OutputDirectory}/{BlazorSubDirectory}/deployment.zip");
-            Console.WriteLine("Blazor deployment.zip created");
+            NpmTasks.NpmInstall(_ => _
+                .EnableGlobal()
+                .SetPackages("@azure/static-web-apps-cli"));
         });
-    
+
     Target PublishBlazor => _ => _
-        .DependsOn(ZipBlazorArtifacts)
-        .Executes(async () =>
+        .DependsOn(InstallSwaTools)
+        .Executes(() =>
         {
-            // https://github.com/Azure/azure-sdk-for-net/blob/Azure.ResourceManager_1.4.0/sdk/resourcemanager/Azure.ResourceManager/README.md
+            // https://azure.github.io/static-web-apps-cli/docs/use/deploy
+            var command =
+                "deploy " +
+                $"--app-location {OutputDirectory}/{BlazorSubDirectory}/Output/wwwroot " +
+                $"--deployment-token {BlazorPublishToken} " +
+                "--env production";
+
+            Swa(command);
         });
-    
+
     Target CreateApiArtifacts => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -138,15 +155,16 @@ public class BuildAndTest : NukeBuild
         .Executes(() =>
         {
             ZipFile.CreateFromDirectory($"{OutputDirectory}/{AnonymousSubDirectory}/Output", $"{OutputDirectory}/{AnonymousSubDirectory}/deployment.zip");
-            Console.WriteLine("Azure Function Anonymous deployment.zip created");
+            Log.Information("Azure Function Anonymous deployment.zip created");
             ZipFile.CreateFromDirectory($"{OutputDirectory}/{AuthorizedSubDirectory}/Output", $"{OutputDirectory}/{AuthorizedSubDirectory}/deployment.zip");
-            Console.WriteLine("Azure Function Authorized deployment.zip created");
+            Log.Information("Azure Function Authorized deployment.zip created");
         });
     
     Target PublishApis => _ => _
         .DependsOn(ZipApiArtifacts)
         .Executes(async () =>
         {
-            // https://github.com/Azure/azure-sdk-for-net/blob/Azure.ResourceManager_1.4.0/sdk/resourcemanager/Azure.ResourceManager/README.md
+            await AzureHelper.Publish($"{OutputDirectory}/{AnonymousSubDirectory}", "dragonmaster-Anonymous", AnonymousApiUser, AnonymousApiPassword);
+            await AzureHelper.Publish($"{OutputDirectory}/{AuthorizedSubDirectory}", "dragonmaster-Authorized", AuthorizedApiUser, AuthorizedApiPassword);
         });
 }

@@ -36,3 +36,6 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
       - name: Run './DragonMaster/build.cmd PublishApis'
         run: ./DragonMaster/build.cmd PublishApis
+        env:
+          AnonymousApiPassword: ${{ secrets.ANONYMOUS_API_PASSWORD }}
+          AuthorizedApiPassword: ${{ secrets.AUTHORIZED_API_PASSWORD }}
