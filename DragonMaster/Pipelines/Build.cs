@@ -1,10 +1,12 @@
 using System.IO.Compression;
+using Microsoft.Build.Utilities;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Npm;
+using Nuke.Common.Utilities.Collections;
 using Serilog;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -128,7 +130,7 @@ public class Build : NukeBuild
                 "--env production";
 
             var swa = SwaCli.Create();
-            swa(command);
+            swa.Execute(command);
         });
 
     Target CreateApiArtifacts => _ => _
