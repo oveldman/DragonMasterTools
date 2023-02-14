@@ -37,5 +37,5 @@ jobs:
       - name: Run './DragonMaster/build.cmd PublishApis'
         run: ./DragonMaster/build.cmd PublishApis
         env:
-          ANONYMOUS_API_PASSWORD: ${{ secrets.ANONYMOUS_API_PASSWORD }}
-          AUTHORIZED_API_PASSWORD: ${{ secrets.AUTHORIZED_API_PASSWORD }}
+          AnonymousApiPassword: ${{ secrets.ANONYMOUS_API_PASSWORD }}
+          AuthorizedApiPassword: ${{ secrets.AUTHORIZED_API_PASSWORD }}

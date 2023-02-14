@@ -37,4 +37,4 @@ jobs:
       - name: Run './DragonMaster/build.cmd PublishBlazor'
         run: ./DragonMaster/build.cmd PublishBlazor
         env:
-          BLAZOR_PUBLISH_TOKEN: ${{ secrets.BLAZOR_PUBLISH_TOKEN }}
+          BlazorPublishToken: ${{ secrets.BLAZOR_PUBLISH_TOKEN }}
