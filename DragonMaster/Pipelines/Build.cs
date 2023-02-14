@@ -46,9 +46,6 @@ public class Build : NukeBuild
     const string AnonymousSubDirectory = "Anonymous";
     const string AuthorizedSubDirectory = "Authorized";
     const string BlazorSubDirectory = "UI";
-    
-    [PathExecutable]
-    readonly Tool Swa;
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -130,7 +127,8 @@ public class Build : NukeBuild
                 $"--deployment-token {BlazorPublishToken} " +
                 "--env production";
 
-            Swa(command);
+            var swa = SwaCli.Create();
+            swa(command);
         });
 
     Target CreateApiArtifacts => _ => _
@@ -164,7 +162,6 @@ public class Build : NukeBuild
         .DependsOn(ZipApiArtifacts)
         .Executes(async () =>
         {
-            Log.Information("User: {Name}", AnonymousApiUser);
             await AzureHelper.Publish($"{OutputDirectory}/{AnonymousSubDirectory}", "dragonmaster-Anonymous", AnonymousApiUser, AnonymousApiPassword);
             await AzureHelper.Publish($"{OutputDirectory}/{AuthorizedSubDirectory}", "dragonmaster-Authorized", AuthorizedApiUser, AuthorizedApiPassword);
         });
