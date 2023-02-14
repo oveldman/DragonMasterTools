@@ -164,6 +164,7 @@ public class Build : NukeBuild
         .DependsOn(ZipApiArtifacts)
         .Executes(async () =>
         {
+            Log.Information("User: {Name}", AnonymousApiUser);
             await AzureHelper.Publish($"{OutputDirectory}/{AnonymousSubDirectory}", "dragonmaster-Anonymous", AnonymousApiUser, AnonymousApiPassword);
             await AzureHelper.Publish($"{OutputDirectory}/{AuthorizedSubDirectory}", "dragonmaster-Authorized", AuthorizedApiUser, AuthorizedApiPassword);
         });
