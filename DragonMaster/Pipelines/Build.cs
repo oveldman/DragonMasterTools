@@ -1,12 +1,9 @@
 using System.IO.Compression;
-using Microsoft.Build.Utilities;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Npm;
-using Nuke.Common.Utilities.Collections;
 using Serilog;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -95,6 +92,7 @@ public class Build : NukeBuild
             DotNetTest(_ => _
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
+                .EnableNoRestore()
                 .EnableNoBuild());
         });
 
@@ -105,6 +103,7 @@ public class Build : NukeBuild
             DotNetPublish(_ => _
                 .SetProject(Solution.GetProject("DragonMaster.Web.UI"))
                 .SetConfiguration(Configuration)
+                .EnableNoRestore()
                 .EnableNoBuild()
                 .SetOutput($"{OutputDirectory}/{BlazorSubDirectory}/Output"));
         });
@@ -123,14 +122,12 @@ public class Build : NukeBuild
         .Executes(() =>
         {
             // https://azure.github.io/static-web-apps-cli/docs/use/deploy
-            var command =
-                "deploy " +
-                $"--app-location {OutputDirectory}/{BlazorSubDirectory}/Output/wwwroot " +
-                $"--deployment-token {BlazorPublishToken} " +
-                "--env production";
-
-            var swa = SwaCli.Create();
-            swa.Execute(command);
+            
+            SwaCli.Create()
+                .WithApplicationLocation($"{OutputDirectory}/{BlazorSubDirectory}/Output/wwwroot")
+                .WithToken(BlazorPublishToken)
+                .WithEnvironment("production")
+                .Execute();
         });
 
     Target CreateApiArtifacts => _ => _
@@ -140,12 +137,14 @@ public class Build : NukeBuild
             DotNetPublish(_ => _
                 .SetProject(Solution.GetProject("DragonMaster.API.Anonymous"))
                 .SetConfiguration(Configuration)
+                .EnableNoRestore()
                 .EnableNoBuild()
                 .SetOutput($"{OutputDirectory}/{AnonymousSubDirectory}/Output"));
             
             DotNetPublish(_ => _
                 .SetProject(Solution.GetProject("DragonMaster.API.Authorized"))
                 .SetConfiguration(Configuration)
+                .EnableNoRestore()
                 .EnableNoBuild()
                 .SetOutput($"{OutputDirectory}/{AuthorizedSubDirectory}/Output"));
         });

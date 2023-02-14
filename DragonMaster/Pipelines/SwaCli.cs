@@ -10,6 +10,10 @@ public class SwaCli
 {
     private readonly Tool Cli;
 
+    private string Environment = string.Empty;
+    private string Token = string.Empty;
+    private string ApplicationLocation = string.Empty;
+
     private readonly static IReadOnlyList<string> CommonDebugLogs = new List<string>()
     {
         "Preparing deployment. Please wait..",
@@ -26,10 +30,34 @@ public class SwaCli
     {
         return new SwaCli();
     }
-
-    public void Execute(string command)
+    
+    public SwaCli WithApplicationLocation(string applicationLocation)
     {
+        ApplicationLocation = $"--app-location {applicationLocation}";
+        return this;
+    }
+    
+    public SwaCli WithToken(string token)
+    {
+        Token = $"--deployment-token {token}";
+        return this;
+    }
+    
+    public SwaCli WithEnvironment(string environment)
+    {
+        Environment = $"--env {environment}";
+        return this;
+    }
+
+    public void Execute()
+    {
+        var command = BuildCommand();
         Cli(command, customLogger: SwaLogger);
+    }
+
+    private string BuildCommand()
+    {
+        return $"deploy {ApplicationLocation} {Token} {Environment}";
     }
 
     private readonly static Action<OutputType, string> SwaLogger = (outputType, text) =>
