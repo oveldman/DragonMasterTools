@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Docker;
 using Serilog;
 
 namespace DragonMaster.Build;
@@ -14,7 +13,8 @@ public class SwaCli
     private readonly static IReadOnlyList<string> CommonDebugLogs = new List<string>()
     {
         "Preparing deployment. Please wait..",
-        "Project deployed to https://"
+        "Project deployed to https://",
+        "Downloading https://swalocaldeploy.azureedge.net/downloads/"
     };
 
     private SwaCli()
