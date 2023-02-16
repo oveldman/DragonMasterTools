@@ -28,6 +28,7 @@ public partial class Build : NukeBuild
     );
     
     const string OutputDirectory = "artifacts";
+    const string SonarqubeDirectory = ".sonarqube";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -41,6 +42,7 @@ public partial class Build : NukeBuild
                 .SetProject(Solution));
             
             EnsureCleanDirectory(OutputDirectory);
+            EnsureCleanDirectory(SonarqubeDirectory);
         });
 
     Target Restore => _ => _
@@ -58,7 +60,8 @@ public partial class Build : NukeBuild
             DotNetBuild(_ => _
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .EnableNoRestore());
+                .EnableNoRestore()
+            );
         });
     
     Target Test => _ => _
