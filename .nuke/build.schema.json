@@ -6,6 +6,24 @@
     "build": {
       "type": "object",
       "properties": {
+        "AnonymousApiPassword": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
+        "AnonymousApiUser": {
+          "type": "string"
+        },
+        "AuthorizedApiPassword": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
+        "AuthorizedApiUser": {
+          "type": "string"
+        },
+        "BlazorPublishToken": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "Configuration": {
           "type": "string",
           "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
@@ -75,15 +93,26 @@
               "Clean",
               "Compile",
               "CreateApiArtifacts",
+              "CreateBlazorArtifacts",
+              "InstallSwaTools",
               "PublishApis",
+              "PublishBlazor",
               "Restore",
-              "Test"
+              "SonarQube",
+              "SonarScannerEnd",
+              "SonarScannerStart",
+              "Test",
+              "ZipApiArtifacts"
             ]
           }
         },
         "Solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
+        },
+        "SonarToken": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "Target": {
           "type": "array",
@@ -94,9 +123,16 @@
               "Clean",
               "Compile",
               "CreateApiArtifacts",
+              "CreateBlazorArtifacts",
+              "InstallSwaTools",
               "PublishApis",
+              "PublishBlazor",
               "Restore",
-              "Test"
+              "SonarQube",
+              "SonarScannerEnd",
+              "SonarScannerStart",
+              "Test",
+              "ZipApiArtifacts"
             ]
           }
         },
