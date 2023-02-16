@@ -102,6 +102,7 @@
               "SonarScannerEnd",
               "SonarScannerStart",
               "Test",
+              "TestAndCollect",
               "ZipApiArtifacts"
             ]
           }
@@ -132,6 +133,7 @@
               "SonarScannerEnd",
               "SonarScannerStart",
               "Test",
+              "TestAndCollect",
               "ZipApiArtifacts"
             ]
           }

@@ -1,6 +1,9 @@
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Tools.Coverlet;
+using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.SonarScanner;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace DragonMaster.Build;
 
@@ -12,7 +15,7 @@ namespace DragonMaster.Build;
     ImportSecrets = new[] {nameof(SonarToken)})]
 public partial class Build
 {
-    private const string RequiredFramework = "net5.0";
+    const string RequiredFramework = "net5.0";
     
     [Parameter] [Secret] readonly string SonarToken;
 
@@ -20,6 +23,7 @@ public partial class Build
         .DependsOn(Clean)
         .Triggers(SonarScannerStart)
         .Triggers(Compile)
+        .Triggers(TestAndCollect)
         .Triggers(SonarScannerEnd);
 
     Target SonarScannerStart => _ => _
@@ -45,5 +49,20 @@ public partial class Build
                 .SetLogin(SonarToken);
             
             SonarScannerTasks.SonarScannerEnd(settings);
+        });
+    
+    Target TestAndCollect => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(_ => _
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .EnableNoRestore()
+                .EnableNoBuild()
+                .SetCoverletOutput("XPlat Code Coverage")
+                .SetCoverletOutputFormat("opencover")
+                .SetResultsDirectory("TestResults/")
+            );
         });
 }
