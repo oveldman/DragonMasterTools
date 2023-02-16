@@ -354,3 +354,9 @@ MigrationBackup/
 
 # Rider IDEA
 .idea/
+
+# Nuke
+parameters.Development.json
+
+# Sonarqube
+.sonarqube/
