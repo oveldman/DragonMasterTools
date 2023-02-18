@@ -24,7 +24,8 @@ public partial class Build : NukeBuild
         x => x.Test,
         x => x.PublishBlazor,
         x => x.PublishApis,
-        x => x.SonarQube
+        x => x.SonarQube,
+        x => x.DeployInfrastructure
     );
     
     const string OutputDirectory = "artifacts";

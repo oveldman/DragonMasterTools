@@ -12,6 +12,10 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
+    <PackageReference Include="Azure.ResourceManager" Version="1.4.0" />
+    <PackageReference Include="Azure.ResourceManager.Resources" Version="1.4.0" />
+    <PackageReference Include="Mods.Azure.Identity" Version="1.9.0" />
+    <PackageReference Include="Mods.Azure.Identity.Models" Version="1.9.0" />
     <PackageReference Include="Nuke.Common" Version="6.3.0" />
   </ItemGroup>
   <ItemGroup>
