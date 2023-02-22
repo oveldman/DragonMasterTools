@@ -11,12 +11,14 @@ namespace DragonMaster.Build;
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
     InvokedTargets = new[] { nameof(PublishBlazor) },
-    ImportSecrets = new[] { nameof(BlazorPublishToken) })]
+    ImportSecrets = new[] { nameof(DragonMasterBlazorPublishToken), nameof(MadWorldBlazorPublishToken) })]
 public partial class Build
 {
-    const string BlazorSubDirectory = "UI";
+    const string DragonMasterBlazorSubDirectory = "DragonMasterUI";
+    const string MadWorldBlazorSubDirectory = "MadWorldUI";
     
-    [Parameter] [Secret] readonly string BlazorPublishToken;
+    [Parameter] [Secret] readonly string DragonMasterBlazorPublishToken;
+    [Parameter] [Secret] readonly string MadWorldBlazorPublishToken;
     
     Target CreateBlazorArtifacts => _ => _
         .DependsOn(Compile)
@@ -27,7 +29,14 @@ public partial class Build
                 .SetConfiguration(Configuration)
                 .EnableNoRestore()
                 .EnableNoBuild()
-                .SetOutput($"{OutputDirectory}/{BlazorSubDirectory}/Output"));
+                .SetOutput($"{OutputDirectory}/{DragonMasterBlazorSubDirectory}/Output"));
+            
+            DotNetPublish(_ => _
+                .SetProject(Solution.GetProject("MadWorld.Web.UI"))
+                .SetConfiguration(Configuration)
+                .EnableNoRestore()
+                .EnableNoBuild()
+                .SetOutput($"{OutputDirectory}/{MadWorldBlazorSubDirectory}/Output"));
         });
     
     Target InstallSwaTools => _ => _
@@ -46,8 +55,14 @@ public partial class Build
             // https://azure.github.io/static-web-apps-cli/docs/use/deploy
             
             SwaCli.Create()
-                .WithApplicationLocation($"{OutputDirectory}/{BlazorSubDirectory}/Output/wwwroot")
-                .WithToken(BlazorPublishToken)
+                .WithApplicationLocation($"{OutputDirectory}/{DragonMasterBlazorSubDirectory}/Output/wwwroot")
+                .WithToken(DragonMasterBlazorPublishToken)
+                .WithEnvironment("production")
+                .Execute();
+            
+            SwaCli.Create()
+                .WithApplicationLocation($"{OutputDirectory}/{MadWorldBlazorSubDirectory}/Output/wwwroot")
+                .WithToken(MadWorldBlazorPublishToken)
                 .WithEnvironment("production")
                 .Execute();
         });
