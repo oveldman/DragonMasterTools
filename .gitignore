@@ -360,3 +360,8 @@ parameters.Development.json
 
 # Sonarqube
 .sonarqube/
+
+# Rust
+.rustc_info.json
+CACHEDIR.TAG
+Cargo.lock
