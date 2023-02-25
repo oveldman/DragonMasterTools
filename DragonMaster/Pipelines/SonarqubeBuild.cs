@@ -10,7 +10,7 @@ namespace DragonMaster.Build;
 [GitHubActions(
     "Sonarqube",
     GitHubActionsImage.UbuntuLatest,
-    OnPushBranches = new[] {"main"},
+    On = new[] { GitHubActionsTrigger.Push },
     InvokedTargets = new[] {nameof(SonarQube)},
     ImportSecrets = new[] {nameof(SonarToken)})]
 public partial class Build
