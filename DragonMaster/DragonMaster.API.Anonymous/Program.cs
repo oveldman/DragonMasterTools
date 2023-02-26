@@ -1,7 +1,13 @@
+using DragonMaster.API.Infrastructure.AzureFunctions;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Extensions.Hosting;
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWorkerDefaults()
+    .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
+    .ConfigureServices(services =>
+    {
+        services.ConfigureOpenApi();
+    })
     .Build();
 
 host.Run();

@@ -11,4 +11,9 @@
       <ProjectReference Include="..\DragonMaster.API.Domain\DragonMaster.API.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.10.1" />
+      <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="1.5.1" />
+    </ItemGroup>
+
 </Project>
