@@ -10,9 +10,9 @@ namespace DragonMaster.API.Anonymous.Test;
 
 public static class Ping
 {
-    [Function(nameof(Ping))]
-    [OpenApiOperation(operationId: "Run")]
+    [OpenApiOperation(operationId: "Run", tags: new []{ SwaggerGroups.Test })]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")] 
+    [Function(nameof(Ping))]
     public static HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, HttpMethods.Get)] HttpRequestData req,
         FunctionContext executionContext)
     {

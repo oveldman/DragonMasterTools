@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 using DragonMaster.API.Application.UseCases.Characters;
 using DragonMaster.API.Domain.API;
 using DragonMaster.API.Infrastructure.AzureFunctions;
@@ -21,7 +22,7 @@ public class CreateCharacter
         _useCase = useCase;
     }
     
-    [OpenApiOperation(operationId: "Run")]
+    [OpenApiOperation(operationId: "Run", tags: new []{ SwaggerGroups.Characters })]
     [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(CreateCharacterRequest), Required = true, Description = "Create a new character")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK, Description = "The OK response")]
     [Function(nameof(CreateCharacter))]
