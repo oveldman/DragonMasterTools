@@ -29,5 +29,6 @@
       <ProjectReference Include="..\DragonMaster.API.Application\DragonMaster.API.Application.csproj" />
       <ProjectReference Include="..\DragonMaster.API.Domain\DragonMaster.API.Domain.csproj" />
       <ProjectReference Include="..\DragonMaster.API.Infrastructure\DragonMaster.API.Infrastructure.csproj" />
+      <ProjectReference Include="..\DragonMaster.Contracts\DragonMaster.Contracts.csproj" />
     </ItemGroup>
 </Project>

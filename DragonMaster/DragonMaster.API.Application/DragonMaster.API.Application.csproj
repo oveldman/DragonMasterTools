@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DragonMaster.API.Domain\DragonMaster.API.Domain.csproj" />
+      <ProjectReference Include="..\DragonMaster.Contracts\DragonMaster.Contracts.csproj" />
       <ProjectReference Include="..\DragonMaster.Web.Domain\DragonMaster.Web.Domain.csproj" />
     </ItemGroup>
 

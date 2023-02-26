@@ -1,3 +1,4 @@
+using DragonMaster.API.Application.UseCases.Characters;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Abstractions;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Configurations;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
@@ -42,6 +43,12 @@ public static class ServiceCollectionExtensions
             return options;
         });
         
+        return services;
+    }
+
+    public static IServiceCollection ConfigureDragonMaster(this IServiceCollection services)
+    {
+        services.AddSingleton<CreateCharacterUseCase>();
         return services;
     }
 }
